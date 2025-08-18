@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken")
 const authService = require("../service/authService")
 
 exports.authMiddleware = function (req, res, next) {

@@ -7,6 +7,8 @@ const todoRouter = require('./routes/todoRouter.js')
 const userRouter = require("./routes/userRouter.js")
 const recordsRouter = require("./routes/recordsRouter.js")
 const fileUpload = require("express-fileupload")
+const cron = require("node-cron")
+const todoController = require("./controllers/todoController.js")
 
 dotenv.config()
 
@@ -20,15 +22,16 @@ app.use('/', authRouter, todoRouter, userRouter, recordsRouter)
 async function startHostAndServer() {
   try {
     await mongoose.connect(process.env.MONGO)
+    cron.schedule("0 4 * * *", () => todoController.deleteNonRepeat())
     app.listen(
       process.env.PORT,
       () => console.log(`Сервер начал работать на ${process.env.PORT} порту`)
     )
-
   } catch (error) {
     console.log(error)
   }
 }
+
 
 startHostAndServer()
 
