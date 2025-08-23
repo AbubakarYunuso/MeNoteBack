@@ -12,9 +12,8 @@ class todoController {
   async create(req, res) {
     try {
       const todoBody = { ...req.body, userId: req.user.id }
-
+      
       const todo = await todosService.create(todoBody)
-
       res.json(todo)
     } catch (error) {
       res.status(500).json("Произошла ошибка при создании задачи, повторите попытку позже")
@@ -24,13 +23,10 @@ class todoController {
   async updateTitle(req, res) {
     try {
       const actualTodo = await todosService.findById(req.params.id)
-      if (!actualTodo) {
-        return res.status(404).json("Задача не найдена")
-      }
+      if (!actualTodo) return res.status(404).json("Задача не найдена")
 
       const isValidUser = userService.checkUser(String(actualTodo.userId), req.user.id)
       if (!isValidUser) return res.status(403).json("Нет прав для изменения задачи")
-
 
       const { title } = req.body
       const updatedTodo = await todosService.update(req.params.id, { title })
@@ -46,9 +42,7 @@ class todoController {
 
     try {
       const actualTodo = await todosService.findById(req.params.id)
-      if (!actualTodo) {
-        return res.status(404).json("Задача не найдена")
-      }
+      if (!actualTodo) return res.status(404).json("Задача не найдена")
 
       const isValidUser = userService.checkUser(String(actualTodo.userId), req.user.id)
       if (!isValidUser) return res.status(403).json("Нет прав для изменения задачи")
@@ -63,9 +57,7 @@ class todoController {
   async updateRepeatStatus(req, res) {
     try {
       const actualTodo = await todosService.findById(req.params.id)
-      if (!actualTodo) {
-        return res.status(404).json("Задача не найдена")
-      }
+      if (!actualTodo) return res.status(404).json("Задача не найдена")
 
       const isValidUser = userService.checkUser(String(actualTodo.userId), req.user.id)
       if (!isValidUser) return res.status(403).json("Нет прав для изменения задачи")
@@ -81,9 +73,7 @@ class todoController {
     try {
 
       const actualTodo = await todosService.findById(req.params.id)
-      if (!actualTodo) {
-        return res.status(404).json("Задача не найдена")
-      }
+      if (!actualTodo) return res.status(404).json("Задача не найдена")
 
       const isValidUser = userService.checkUser(String(actualTodo.userId), req.user.id)
       if (!isValidUser) return res.status(403).json("Нет прав для изменения задачи")

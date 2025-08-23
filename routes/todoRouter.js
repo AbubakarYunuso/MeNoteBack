@@ -14,7 +14,9 @@ router.patch("/todos/:id/complete",
   authMiddleware, todoController.updateCompletedStatus)
 router.patch("/todos/:id/repeat",
   authMiddleware, todoController.updateRepeatStatus)
-router.delete("/todos/:id", authMiddleware, todoController.delete)
-router.get("/todos", authMiddleware, todoController.getAllUserTodos)
+router.delete("/todos/:id",
+  authMiddleware, todoController.delete)
+router.get("/todos",
+  authMiddleware, todoController.getAllUserTodos)
 
 module.exports = router
