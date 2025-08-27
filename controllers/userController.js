@@ -6,11 +6,8 @@ class UserController {
 
   async updateName(req, res) {
     try {
-
-      const isValidUser = userService.checkUser(req.params.id, req.user.id)
-      if (!isValidUser) return res.status(403).json("Нет прав для удаления пользователя")
-
-      const user = await userService.update(req.params.id, req.body)
+      const { name } = req.body
+      const user = await userService.update(req.user.id, { name })
 
       res.json({ ...req.user, name: user.name })
 
@@ -21,13 +18,9 @@ class UserController {
 
   async updatePassword(req, res) {
     try {
-
-      const isValidUser = userService.checkUser(req.params.id, req.user.id)
-      if (!isValidUser) return res.status(403).json("Нет прав для удаления пользователя")
-
       const { password, newPassword } = req.body
 
-      const user = await userService.searchById(req.params.id)
+      const user = await userService.searchById(req.user.id)
 
       const isValidPassword = passwordService.verify(password, user.password)
       const isNotCopyPassword = passwordService.verify(newPassword, user.password)
@@ -38,7 +31,7 @@ class UserController {
 
       const hashPassword = passwordService.hash(newPassword)
 
-      await userService.update(req.params.id, { password: hashPassword })
+      await userService.update(req.user.id, { password: hashPassword })
 
       res.json("Пароль изменён")
     } catch (error) {
@@ -48,18 +41,14 @@ class UserController {
 
   async addAndupdateAvatar(req, res) {
     try {
-
-      const isValidUser = userService.checkUser(req.params.id, req.user.id)
-      if (!isValidUser) return res.status(403).json("Нет прав для удаления пользователя")
-
-      const user = await userService.searchById(req.params.id)
+      const user = await userService.searchById(req.user.id)
 
       if (!req.files || !req.files.avatar) {
         return res.status(400).json("Файл аватара не найден")
       }
 
       const fileName = fileService.addImage(req.files.avatar)
-      const updatedUser = await userService.update(req.params.id, { avatar: fileName })
+      const updatedUser = await userService.update(req.user.id, { avatar: fileName })
 
       if (user.avatar !== process.env.NO_AVATAR) {
         fileService.deleteImage(user.avatar)
@@ -74,18 +63,14 @@ class UserController {
 
   async removeAvatar(req, res) {
     try {
-
-      const isValidUser = userService.checkUser(req.params.id, req.user.id)
-      if (!isValidUser) return res.status(403).json("Нет прав для удаления пользователя")
-
-      const user = await userService.searchById(req.params.id)
+      const user = await userService.searchById(req.user.id)
 
       if (user.avatar === process.env.NO_AVATAR) {
         return res.status(400).json("Аватар уже удалён")
       }
 
       const removeAvatar = fileService.deleteImage(user.avatar)
-      const updateUser = await userService.update(req.params.id, { avatar: removeAvatar })
+      const updateUser = await userService.update(req.user.id, { avatar: removeAvatar })
 
       res.json({ ...req.user, avatar: updateUser.avatar })
 
@@ -97,10 +82,7 @@ class UserController {
   async deleteAccount(req, res) {
     try {
 
-      const isValidUser = userService.checkUser(req.params.id, req.user.id)
-      if (!isValidUser) return res.status(403).json("Нет прав для удаления пользователя")
-
-      const user = await userService.delete(req.params.id)
+      const user = await userService.delete(req.user.id)
 
       if (user.avatar !== process.env.NO_AVATAR) {
         fileService.deleteImage(user.avatar)

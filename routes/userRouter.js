@@ -4,10 +4,10 @@ const userController = require("../controllers/userController")
 
 const router = Router()
 
-router.patch("/user/:id/name", authMiddleware, userController.updateName)
-router.patch("/user/:id/password", authMiddleware, userController.updatePassword)
-router.patch("/user/:id/avatar", authMiddleware, userController.addAndupdateAvatar)
-router.delete("/user/:id/avatar", authMiddleware, userController.removeAvatar)
-router.delete("/user/:id", authMiddleware, userController.deleteAccount)
+router.patch("/user/name", authMiddleware, userController.updateName)
+router.patch("/user/password", authMiddleware, userController.updatePassword)
+router.patch("/user/avatar", authMiddleware, userController.addAndupdateAvatar)
+router.delete("/user/avatar", authMiddleware, userController.removeAvatar)
+router.delete("/user", authMiddleware, userController.deleteAccount)
 
 module.exports = router

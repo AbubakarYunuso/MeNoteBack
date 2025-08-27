@@ -6,11 +6,9 @@ const TodoSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
-    required: true
   },
   isOnRepeat: {
     type: Boolean,
-    required: true,
     default: false
   }
 })
