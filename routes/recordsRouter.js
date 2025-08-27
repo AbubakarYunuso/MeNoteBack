@@ -7,11 +7,13 @@ const { recordValidetion } = require("../validations/recordValidation")
 
 const router = Router()
 
-router.get("/records",
+router.get("/records/search",
+  authMiddleware, recordController.getByHeader)
+router.get("/records/",
   authMiddleware, recordController.getAll)
 router.get("/records/:id",
   authMiddleware, recordController.getOne)
-router.post("/records",
+router.post("/records/",
   authMiddleware, recordValidetion, validationMiddleware, recordController.create)
 router.patch("/records/:id",
   authMiddleware, recordValidetion, validationMiddleware, recordController.update)

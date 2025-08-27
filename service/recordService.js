@@ -36,6 +36,14 @@ class recordService {
     const record = await RecordModel.findByIdAndDelete(recordId, { new: true })
     return record
   }
+
+  async findByHeader(userId, header) {
+
+    const searchRegex = new RegExp(header, 'i');
+
+    const record = await RecordModel.find({ userId, header: searchRegex })
+    return record
+  }
 }
 
 module.exports = new recordService

@@ -3,6 +3,11 @@ const userService = require("../service/userService");
 
 class recordController {
 
+  async getByHeader(req, res) {
+    const record = await recordService.findByHeader(req.user.id, req.query.header)
+    res.json(record)
+  }
+
   async getOne(req, res) {
     try {
       const records = await recordService.findById(req.params.id)

@@ -9,15 +9,18 @@ const recordsRouter = require("./routes/recordsRouter.js")
 const fileUpload = require("express-fileupload")
 const cron = require("node-cron")
 const todoController = require("./controllers/todoController.js")
+const cors = require('cors')
 
 dotenv.config()
 
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 app.use(fileUpload())
 app.use(express.static("static"))
 app.use('/', authRouter, todoRouter, userRouter, recordsRouter)
+
 
 async function startHostAndServer() {
   try {
